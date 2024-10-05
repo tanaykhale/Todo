@@ -1,5 +1,8 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { Outlet, useNavigate } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { startTransition } from "react";
+import React from "react";
 
 interface TodoItemsProps {
   task: string;
@@ -12,7 +15,14 @@ const TodoItems = ({ task, handleClick, handleChange }: TodoItemsProps) => {
 
   const handleTodoandNavigate = () => {
     handleClick();
-    navigate("lists");
+    startTransition(() => {
+      navigate("lists");
+    });
+  };
+  const handleBack = () => {
+    startTransition(() => {
+      navigate("/");
+    });
   };
   const handleKey = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") handleTodoandNavigate();
@@ -20,6 +30,9 @@ const TodoItems = ({ task, handleClick, handleChange }: TodoItemsProps) => {
   return (
     <Box sx={{ mt: 4 }} textAlign="center">
       <Typography variant="h4" sx={{ fontWeight: "bold" }} gutterBottom>
+        <Button onClick={handleBack}>
+          <ArrowBackIcon></ArrowBackIcon>
+        </Button>{" "}
         Todo's
       </Typography>
       <Box
@@ -52,4 +65,4 @@ const TodoItems = ({ task, handleClick, handleChange }: TodoItemsProps) => {
   );
 };
 
-export default TodoItems;
+export default React.memo(TodoItems);

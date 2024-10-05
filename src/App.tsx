@@ -5,6 +5,7 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
+import ErrorPage from "./components/ErrorPage";
 
 const TodoForm = lazy(() => import("./components/TodoForm"));
 const TodoItems = lazy(() => import("./components/TodoItems"));
@@ -48,7 +49,11 @@ const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
-        <Route path="/" element={<TodoForm />} />
+        <Route
+          path="/"
+          element={<TodoForm />}
+          errorElement={<ErrorPage></ErrorPage>}
+        />
         <Route
           path="items"
           element={
@@ -58,6 +63,7 @@ const App = () => {
               handleChange={handleChange}
             />
           }
+          errorElement={<ErrorPage></ErrorPage>}
         >
           <Route
             path="lists"
@@ -72,6 +78,7 @@ const App = () => {
                 setEditedValue={setEditedValue}
               />
             }
+            errorElement={<ErrorPage></ErrorPage>}
           />
         </Route>
       </>

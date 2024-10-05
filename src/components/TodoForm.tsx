@@ -2,6 +2,7 @@ import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import validateSchema from "../schemas";
+import React from "react";
 
 const TodoForm = () => {
   const navigate = useNavigate();
@@ -14,11 +15,9 @@ const TodoForm = () => {
       navigate("/items");
     },
   });
-
-  // Function to handle key events (submit form on Enter key)
   const handleKeyDown = (event: React.KeyboardEvent<HTMLFormElement>) => {
     if (event.key === "Enter") {
-      formik.handleSubmit(); // Trigger form submission
+      formik.handleSubmit();
     }
   };
 
@@ -35,7 +34,11 @@ const TodoForm = () => {
           backgroundColor: "#fff",
         }}
       >
-        <form onSubmit={formik.handleSubmit} onKeyDown={handleKeyDown}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={handleKeyDown}
+          className="box"
+        >
           <TextField
             fullWidth
             label="Name"
@@ -94,4 +97,4 @@ const TodoForm = () => {
   );
 };
 
-export default TodoForm;
+export default React.memo(TodoForm);
