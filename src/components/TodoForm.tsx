@@ -2,19 +2,43 @@ import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import validateSchema from "../schemas";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-const TodoForm = () => {
+interface FormProp {
+  setAuth: (value: boolean) => void;
+}
+
+const TodoForm = ({ setAuth }: FormProp) => {
+  const [users, setUsers] = useState<{ Email: string; Password: string }[]>([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedUsers = localStorage.getItem("user");
+    if (storedUsers) {
+      const parsedUsers = JSON.parse(storedUsers);
+      setUsers(parsedUsers);
+    }
+  }, []);
 
   const formik = useFormik({
     initialValues: { name: "", email: "", password: "" },
     validationSchema: validateSchema,
     onSubmit: (values) => {
-      console.log("Form Data: ", values);
-      navigate("/items");
+      const compareData = users.find(
+        (user) =>
+          user.Email === values.email && user.Password === values.password
+      );
+
+      if (compareData) {
+        setAuth(true);
+        navigate("/items");
+      } else {
+        setAuth(false);
+        navigate("/signup");
+      }
     },
   });
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLFormElement>) => {
     if (event.key === "Enter") {
       formik.handleSubmit();

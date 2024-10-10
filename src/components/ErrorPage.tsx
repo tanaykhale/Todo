@@ -1,4 +1,3 @@
-// components/ErrorPage.tsx
 import { useRouteError } from "react-router-dom";
 import { Typography, Container } from "@mui/material";
 
