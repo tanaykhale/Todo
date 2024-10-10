@@ -8,8 +8,10 @@ import {
 import ErrorPage from "./components/ErrorPage";
 
 import AuthGuard from "./components/AuthGuard";
+import Navbar from "./components/Navbar";
+import SignupPage from "./components/SignupPage";
 
-const TodoForm = lazy(() => import("./components/TodoForm"));
+const LoginPage = lazy(() => import("./components/LoginPage"));
 const TodoItems = lazy(() => import("./components/TodoItems"));
 const TodoList = lazy(() => import("./components/TodoList"));
 
@@ -58,38 +60,41 @@ const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
-        <Route
-          path="/"
-          element={<TodoForm setAuth={setAuth} />}
-          errorElement={<ErrorPage></ErrorPage>}
-        />
-        <Route element={<AuthGuard auth={auth}></AuthGuard>}>
+        <Route path="/" element={<Navbar></Navbar>}>
           <Route
-            path="items"
-            element={
-              <TodoItems
-                task={task}
-                handleClick={handleClick}
-                handleChange={handleChange}
-              />
-            }
+            path="login"
+            element={<LoginPage setAuth={setAuth} />}
             errorElement={<ErrorPage></ErrorPage>}
-          >
+          />
+          <Route path="signup" element={<SignupPage></SignupPage>}></Route>
+          <Route element={<AuthGuard auth={auth}></AuthGuard>}>
             <Route
-              path="lists"
+              path="items"
               element={
-                <TodoList
-                  todos={todos}
-                  editedValue={editedValue}
-                  editIndex={editIndex}
-                  onDelete={handleDelete}
-                  handleSave={handleSave}
-                  handleEdit={handleEdit}
-                  setEditedValue={setEditedValue}
+                <TodoItems
+                  task={task}
+                  handleClick={handleClick}
+                  handleChange={handleChange}
                 />
               }
               errorElement={<ErrorPage></ErrorPage>}
-            />
+            >
+              <Route
+                path="lists"
+                element={
+                  <TodoList
+                    todos={todos}
+                    editedValue={editedValue}
+                    editIndex={editIndex}
+                    onDelete={handleDelete}
+                    handleSave={handleSave}
+                    handleEdit={handleEdit}
+                    setEditedValue={setEditedValue}
+                  />
+                }
+                errorElement={<ErrorPage></ErrorPage>}
+              />
+            </Route>
           </Route>
         </Route>
       </>
