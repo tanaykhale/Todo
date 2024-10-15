@@ -11,10 +11,10 @@ const SignupPage = () => {
       const existingData = JSON.parse(localStorage.getItem("user") || "[]");
       const user = [
         ...existingData,
-        { Email: values.email, Password: values.password },
+        { Name: values.name, Email: values.email, Password: values.password },
       ];
       localStorage.setItem("user", JSON.stringify(user));
-      alert("Sign up Complete.You can login now");
+      alert("Sign up Complete.You can now login");
     },
   });
 

@@ -1,17 +1,30 @@
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import { useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import validateSchema from "../schemas";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 interface FormProp {
   setAuth: (value: boolean) => void;
+  users: { Name: string; Email: string; Password: string }[];
+  setUsers: React.Dispatch<
+    React.SetStateAction<{ Name: string; Email: string; Password: string }[]>
+  >;
+  setCurrentUser: React.Dispatch<
+    React.SetStateAction<{
+      Name: string;
+      Email: string;
+      Password: string;
+    } | null>
+  >;
 }
 
-const LoginPage = ({ setAuth }: FormProp) => {
-  const [users, setUsers] = useState<{ Email: string; Password: string }[]>([]);
+const LoginPage = ({ setAuth, users, setUsers, setCurrentUser }: FormProp) => {
   const navigate = useNavigate();
-
+  const location = useLocation();
+  useEffect(() => {
+    if ((location.pathname = "/login")) setAuth(false);
+  }, [location]);
   useEffect(() => {
     const storedUsers = localStorage.getItem("user");
     if (storedUsers) {
@@ -26,11 +39,14 @@ const LoginPage = ({ setAuth }: FormProp) => {
     onSubmit: (values) => {
       const compareData = users.find(
         (user) =>
-          user.Email === values.email && user.Password === values.password
+          user.Email === values.email &&
+          user.Password === values.password &&
+          values.name === user.Name
       );
 
       if (compareData) {
         setAuth(true);
+        setCurrentUser(compareData);
         navigate("/items");
       } else {
         setAuth(false);
